@@ -1,0 +1,4 @@
+
+1) creare una flutter app e mostrare una AppBar con del testo sotto
+2) Aggiungere un pulsante che cambia il testo
+3) splittare l'app in 3 widget: app, textcontrol e text
