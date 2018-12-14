@@ -6,6 +6,7 @@ import './pages/home.dart';
 
 //void main() => runApp(MyApp());
 void main() {
+  // serie di parametri utili per il debuggin dell'applicazione
   // debugPaintSizeEnabled = true;
   // debugPaintBaselinesEnabled = true;
   // debugPaintPointersEnabled = true;
