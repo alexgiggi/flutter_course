@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import './pages/product.dart';
 import './pages/miaClasse.dart';
 
-class Products extends StatelessWidget {
+class Products extends StatelessWidget { // questa classe contiene la lista dei prodotti aggiunti
   final List<Map<String, dynamic>> products;
   final Function deleteProduct;
 
@@ -15,8 +15,7 @@ class Products extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(products[index][
-              'image']), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
+          Image.asset(products[index]['image']), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
           Text(products[index]['title']),
           ButtonBar(
             alignment: MainAxisAlignment.center,
@@ -54,24 +53,21 @@ class Products extends StatelessWidget {
     Widget productCard;
 
     if (products.length > 0) {
-      productCard = ListView.builder(
-        itemBuilder: _buildProductItem,
+      productCard = ListView.builder( // il metodo statico builder viene utilizzato se si vuole creare una lista che si carica dinamicamente
+        itemBuilder: _buildProductItem, // questa funzione restituisce un widget
         itemCount: products.length,
       );
     } else {
       productCard = Center(
         child: Text('No products found, please add some'),
       );
-      // Se volessi restituire un widget senza nulla allora dovrei
-      // restituire:
-      // productCard = Container();
+      // Se volessi restituire un widget senza nulla allora dovrei restituire: productCard = Container();
     }
     return productCard;
   }
 
   @override
-  Widget build(
-      BuildContext context) // chiamato dopo il costruttore ma anche ogni volta
+  Widget build(BuildContext context) // chiamato dopo il costruttore ma anche ogni volta che c'è un cambiamento di stato 
   {
     return _buildProductList();
 

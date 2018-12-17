@@ -4,7 +4,7 @@ import './product_control.dart';
 
 class ProductManager extends StatefulWidget {
   
-  final Map<String, dynamic> startingProduct;
+  final Map<String, dynamic> startingProduct; // prodotto di partenza
 
   ProductManager({this.startingProduct/* = 'prodotto di default'*/}) // la graffa per i parametri opzionali? 
   {
@@ -56,6 +56,7 @@ class _ProductManagerState extends State<ProductManager> {
       
       
     }
+  
   @override
   Widget build(BuildContext context) // chiamato ogni volta che cambia qualcosa nell'albero dei widget di questa classe (almeno
                                      // una volta in fase di creazione dell'oggetto) ATTENZIONE: SETSTATE forza la richiamata di
@@ -65,11 +66,14 @@ class _ProductManagerState extends State<ProductManager> {
     return Column(children: [
                               Container(
                                 margin: EdgeInsets.all(10.0),
-                                child: ProductControl(_updateProduct),
+                                child: ProductControl(_updateProduct), // ProductControl è il widget che contiene il pulsante che cambia lo stato di questo widget
+                                                                       // aggiungendo nuovi prodotti alla lista
                               )
                               ,
                               // Container(height: 300.0,child: Products(_products))
-                              Expanded(child: Products(_products, deleteProduct:_deleteProduct))
+                              Expanded(child: Products(_products, deleteProduct:_deleteProduct)) // --> widget che contiene la lista dei prodotti. Expanded è 
+                                                                                                 // un tipo di widget che si espande all'aumentare degli oggetti
+                                                                                                 // in esso contenuti.
                             ] //end children
           ,);    
   }
@@ -85,15 +89,15 @@ class _ProductManagerState extends State<ProductManager> {
       super.didUpdateWidget(oldWidget);
     }
 
-    void _updateProduct(Map<String, dynamic> product){
-      setState(() 
+    void _updateProduct(Map<String, dynamic> product){ // funzione da passare al widget ProductControl per l'aggiunta di prodotti
+      setState(() //--> il setState forza la chiamata a build
       {
         _products.add(product);
         print(_products);
       });
     }
 
-    void _deleteProduct(int index){
+    void _deleteProduct(int index){ // funzione da passare al widget per l'eliminazione del prodotto (index)-esimo.
       setState(() { 
               _products.removeAt(index);
             });
