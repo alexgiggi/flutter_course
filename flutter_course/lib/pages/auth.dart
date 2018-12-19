@@ -10,7 +10,8 @@ class AuthPage extends StatelessWidget{
             title: Text('Please authenticate'),
           ),
           body: Center(child: RaisedButton(child: Text('LOGIN'),onPressed: (){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>ProductsPage()));
+            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=>ProductsPage()));
+            Navigator.pushReplacementNamed(context, '/');
           },),),
         );
   }

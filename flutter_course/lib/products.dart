@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './pages/product.dart';
+import './pages/product_page.dart';
 import './pages/miaClasse.dart';
 
 class Products extends StatelessWidget { // questa classe contiene la lista dei prodotti aggiunti
@@ -22,12 +22,8 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
                               children: <Widget>[
                                 FlatButton(
                                   child: Text('Details'),
-                                  onPressed: () => Navigator.push<MiaClasse>(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) => ProductPage(
-                                              products[index]['title'],
-                                              products[index]['image']))).then((MiaClasse value) {
+                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + index.toString()).then((MiaClasse value) 
+                                              { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
                                                 print('funzione che cattura il back (Navigator.pop)');
                                                 if (value!=null && value.cancellabile){
                                                   print('Ritorno: ' + value.nome);
