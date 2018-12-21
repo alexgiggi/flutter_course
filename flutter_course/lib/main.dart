@@ -3,8 +3,8 @@ import './pages/product_admin.dart';
 import './pages/product_page.dart';
 import './pages/productsPage.dart';
 import './pages/miaClasse.dart';
+import './pages/auth.dart';
 
-// import './pages/auth.dart';
 // import './pages/productsPage.dart';
 
 // import './product_manager.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Map<String, String>> _products = [];
+  List<Map<String, dynamic>> _products = [];
 
   void _updateProduct(Map<String, dynamic> product) {
     // funzione da passare al widget ProductControl per l'aggiunta di prodotti
@@ -57,8 +57,9 @@ class _MyAppState extends State<MyApp> {
             accentColor: Colors.deepPurple),
         // home: AuthPage(), // vedi commento sotto relativo alla route '/'
         routes: {
-          '/': (BuildContext context) => ProductsPage(_products, _updateProduct, _deleteProduct),    // se specifico questo route allora devo commentare la riga in cui vado a definire la home
-          '/admin': (BuildContext context) => ProductsAdminPage(),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
+          '/': (BuildContext context) => AuthPage(),    // se specifico questo route allora devo commentare la riga in cui vado a definire la home
+          '/products': (BuildContext context) => ProductsPage(_products),   
+          '/admin': (BuildContext context) => ProductsAdminPage(_updateProduct, _deleteProduct),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
                                                                     // Navigator.pushReplacementNamed(context, '/admin');
           /*                                                                   
            // la route sottostante non si può usare perchè è parametrizzata rispetto al valore di index, per cui si usa la onGenerateRoute
@@ -86,7 +87,7 @@ class _MyAppState extends State<MyApp> {
         },
         onUnknownRoute: (RouteSettings settings){ // richiamata quando viene cercato un path route non registrato oppure quando la funzione 'onGenerateRoute' restituisce null
                                                   // al posto di un valido 'MaterialPageRoute'
-          return MaterialPageRoute(builder: (BuildContext context) => ProductsPage(_products, _updateProduct, _deleteProduct));
+          return MaterialPageRoute(builder: (BuildContext context) => ProductsPage(_products));
         },
         );
   }

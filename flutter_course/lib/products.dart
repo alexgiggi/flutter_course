@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import './pages/product_page.dart';
 import './pages/miaClasse.dart';
 
 class Products extends StatelessWidget { // questa classe contiene la lista dei prodotti aggiunti
   final List<Map<String, dynamic>> products;
-  final Function deleteProduct;
-
-  Products(this.products, {this.deleteProduct}) {
+  
+  Products(this.products) {
     // nota bene ciò che viene passato come parametro del costruttore va ad inizializzare direttamente "this.products"!!
     print('[Products widget] constructor');
   }
@@ -25,6 +23,7 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
                                   onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + index.toString()).then((MiaClasse value) 
                                               { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
                                                 print('funzione che cattura il back (Navigator.pop)');
+                                                /*
                                                 if (value!=null && value.cancellabile){
                                                   print('Ritorno: ' + value.nome);
                                                   deleteProduct(index);
@@ -35,7 +34,7 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
                                                   else
                                                     print('*** value!=null ma value.cancellabile=false');
                                                 }
-                                                
+                                                */
                                               }),
                                 )
                               ],

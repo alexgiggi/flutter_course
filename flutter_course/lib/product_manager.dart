@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './products.dart';
-import './product_control.dart';
+
+// import './product_control.dart';
 
 class ProductManager extends StatelessWidget {
   
@@ -54,11 +55,9 @@ class ProductManager extends StatelessWidget {
 //       }
 //     }
   
-  final List<Map<String,String>> products;
-  final Function addProduct;
-  final Function dleteProduct;
-
-  ProductManager(this.products, this.addProduct, this.dleteProduct);
+  final List<Map<String, dynamic>> products;
+  
+  ProductManager(this.products);
 
   @override
   Widget build(BuildContext context) // chiamato ogni volta che cambia qualcosa nell'albero dei widget di questa classe (almeno
@@ -67,14 +66,16 @@ class ProductManager extends StatelessWidget {
   {
     print('[ProductManagerState] build()');
     return Column(children: [
+                              /*
                               Container(
                                 margin: EdgeInsets.all(10.0),
                                 child: ProductControl(addProduct), // ProductControl è il widget che contiene il pulsante che cambia lo stato di questo widget
                                                                        // aggiungendo nuovi prodotti alla lista
                               )
-                              ,
+                              */
+                              
                               // Container(height: 300.0,child: Products(_products))
-                              Expanded(child: Products(products, deleteProduct:dleteProduct)) // --> widget che contiene la lista dei prodotti. Expanded è 
+                              Expanded(child: Products(products)) // --> widget che contiene la lista dei prodotti. Expanded è 
                                                                                                  // un tipo di widget che si espande all'aumentare degli oggetti
                                                                                                  // in esso contenuti.
                             ] //end children

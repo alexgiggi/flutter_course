@@ -3,11 +3,9 @@ import '../product_manager.dart';
 
 class ProductsPage extends StatelessWidget {
 
-final List<Map<String,String>> products;
-  final Function addProducts;
-  final Function deleteProducts;
-
-  ProductsPage(this.products, this.addProducts, this.deleteProducts);
+final List<Map<String, dynamic>> products;
+  
+  ProductsPage(this.products);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,7 @@ final List<Map<String,String>> products;
       appBar: AppBar(
         title: Text('EasyList'),
       ),
-      body: ProductManager(/*startingProduct: 'food Tester'*/products, addProducts, deleteProducts),
+      body: ProductManager(/*startingProduct: 'food Tester'*/products),
     );
   }
 }
