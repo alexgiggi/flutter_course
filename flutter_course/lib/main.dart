@@ -8,12 +8,12 @@ import './pages/auth.dart';
 // import './pages/productsPage.dart';
 
 // import './product_manager.dart';
-// import 'package:flutter/rendering.dart';
+import 'package:flutter/rendering.dart';
 
 //void main() => runApp(MyApp());
 void main() {
   // serie di parametri utili per il debuggin dell'applicazione
-  // debugPaintSizeEnabled = true;
+  //debugPaintSizeEnabled = true; //--> visualizza occupazione spazi widget
   // debugPaintBaselinesEnabled = true;
   // debugPaintPointersEnabled = true;
   runApp(MyApp());

@@ -9,12 +9,41 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
     print('[Products widget] constructor');
   }
 
+// vedere i concetti di Flexible ed Expanded!!!
+
   Widget _buildProductItem(BuildContext context, int index) {
     return Card(
       child: Column(
         children: <Widget>[
                             Image.asset(products[index]['image']), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
-                            Text(products[index]['title']),
+                            // SizedBox(height: 5.0,),
+                            Container(color: Colors.blue,
+                            height: 40.0, 
+                            // margin: EdgeInsets.all(10.0),
+                            margin: EdgeInsets.only(top: 10.0, left: 00.0, bottom: 1.0), // il margin è lo spazio allesterno del contenitore
+                            padding: EdgeInsets.only(top: 0.0), // il padding è lo spazio all'interno del contenitore
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                              Text(products[index]['title'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),
+                              SizedBox(width: 8.0,),
+                              Text(' (' + (products[index]['price'].toString()) + ' €.)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),
+                              SizedBox(width: 8.0,),
+                              Container(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
+                                        decoration: BoxDecoration(color: Theme.of(context).accentColor, borderRadius: BorderRadius.circular(5.0)), 
+                                        child: Text('\$ ${products[index]['price'].toString()}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),)
+                              
+                            ],)),
+                            DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(color: Colors.grey, width: 2.0, )
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
+                                child: Text('Union Square, San Francisco')),
+                              ),
+                            // sText(products[index]['title']),
                             ButtonBar(
                               alignment: MainAxisAlignment.center,
                               children: <Widget>[
