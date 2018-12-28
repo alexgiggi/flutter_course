@@ -9,7 +9,7 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
     print('[Products widget] constructor');
   }
 
-// vedere i concetti di Flexible ed Expanded!!!
+// ATTENZIONE!!! vedere i concetti di Flexible ed Expanded!!!
 
   Widget _buildProductItem(BuildContext context, int index) {
     return Card(
@@ -65,6 +65,27 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
                                                 }
                                                 */
                                               }),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.info),
+                                  iconSize: 40.0,
+                                  color: Theme.of(context).accentColor,
+                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + index.toString()).then((MiaClasse value) 
+                                              { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
+                                                print('funzione che cattura il back (Navigator.pop)');                                                
+                                              }),
+                                  
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.favorite_border),
+                                  color: Colors.redAccent,
+                                  iconSize: 40.0,
+                                  
+                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + index.toString()).then((MiaClasse value) 
+                                              { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
+                                                print('funzione che cattura il back (Navigator.pop)');                                                
+                                              }),
+                                  
                                 )
                               ],
                             )

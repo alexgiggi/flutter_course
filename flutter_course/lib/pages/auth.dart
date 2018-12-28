@@ -18,11 +18,19 @@ class _AuthPageState extends State<AuthPage> {
         title: Text('Login'),
       ),
       body: Container(
-        margin: EdgeInsets.all(10.0),
-        child: ListView(
-          children: <Widget>[
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.dstATop),
+            image: AssetImage('assets/background.jpg'))          
+          ),
+        // margin: EdgeInsets.all(10.0), // --> Margin definisce lo spazio esterno
+        padding: EdgeInsets.all(10.0), //  --> Padding definisce lo spazio interno
+        // child:Center(child: ListView(
+        child:Center(child: SingleChildScrollView(
+          child: Column(children: <Widget>[
             TextField(
-              decoration: InputDecoration(labelText: 'E-Mail'),
+              decoration: InputDecoration(labelText: 'E-Mail', filled: true, fillColor: Colors.white),
               keyboardType: TextInputType.emailAddress,
               onChanged: (String value) {
                 setState(() {
@@ -30,8 +38,9 @@ class _AuthPageState extends State<AuthPage> {
                 });
               },
             ),
+            SizedBox(height: 10.9,),
             TextField(
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(labelText: 'Password', filled: true, fillColor: Colors.white),
               obscureText: true,
               onChanged: (String value) {
                 setState(() {
@@ -62,6 +71,8 @@ class _AuthPageState extends State<AuthPage> {
               },
             ),
           ],
+        ),
+        ),
         ),
       ),
     );

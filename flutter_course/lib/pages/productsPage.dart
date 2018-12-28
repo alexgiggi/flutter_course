@@ -18,12 +18,14 @@ final List<Map<String, dynamic>> products;
               title: Text('Choose'),
             ),
             ListTile(
+              leading: Icon(Icons.edit),
               title: Text('Manage Product'),
               onTap: () {/*
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (BuildContext context) =>
+                                  builder
+                                  leading: Icon(Icons.edit),: (BuildContext context) =>
                                       ProductsAdminPage()));
                                       */
                           Navigator.pushReplacementNamed(context, '/admin');
@@ -34,6 +36,11 @@ final List<Map<String, dynamic>> products;
       ),
       appBar: AppBar(
         title: Text('EasyList'),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.favorite),
+          onPressed: (){},
+          )
+        ],
       ),
       body: ProductManager(/*startingProduct: 'food Tester'*/products),
     );
