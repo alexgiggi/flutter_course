@@ -4,11 +4,21 @@ import './pages/product_page.dart';
 import './pages/productsPage.dart';
 import './pages/miaClasse.dart';
 import './pages/auth.dart';
+import './models/product.dart';
 
 // import './pages/productsPage.dart';
 
 // import './product_manager.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
+
+// void miaFunzione(@required int primo, int secondo){
+//   try {
+//     print((primo+secondo).toString());    
+//   } catch (e) {
+//     print('errore: ' + e.toString());
+//   }
+  
+// }
 
 //void main() => runApp(MyApp());
 void main() {
@@ -16,6 +26,9 @@ void main() {
   //debugPaintSizeEnabled = true; //--> visualizza occupazione spazi widget
   // debugPaintBaselinesEnabled = true;
   // debugPaintPointersEnabled = true;
+
+  // miaFunzione(1,3);
+
   runApp(MyApp());
 }
 
@@ -28,10 +41,11 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyApp> {
-  List<Map<String, dynamic>> _products = [];
 
-  void _addProduct(Map<String, dynamic> product) {
+class _MyAppState extends State<MyApp> {
+  List<Product> _products = [];
+
+  void _addProduct(Product product) {
     // funzione da passare al widget ProductControl per l'aggiunta di prodotti
     setState(() //--> il setState forza la chiamata a build
         {
@@ -40,7 +54,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _updateProduct(int index, Map<String, dynamic> product) {
+  void _updateProduct(int index, Product product) {
     setState(
       () //--> il setState forza la chiamata a build
         {
@@ -91,7 +105,7 @@ class _MyAppState extends State<MyApp> {
             final int index = int.parse(pathElements[2]);
             return MaterialPageRoute<MiaClasse>(
                 builder: (BuildContext context) => ProductPage(
-                    _products[index]['title'], _products[index]['image'], double.parse(_products[index]['price']), _products[index]['description']));
+                    _products[index].title, _products[index].image, _products[index].price, _products[index].description));
           }
 
           return null;

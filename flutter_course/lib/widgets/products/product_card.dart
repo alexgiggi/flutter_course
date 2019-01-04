@@ -3,9 +3,10 @@ import '../../pages/miaClasse.dart';
 import './price_tag.dart';
 import '../../ui_elements/title_default.dart';
 import './address_tag.dart'; 
+import '../../models/product.dart';
 
 class ProductCard extends StatelessWidget{
-  final Map<String, dynamic> product;
+  final Product product;
   final int productIndex;
   ProductCard(this.product, this.productIndex);
 
@@ -19,11 +20,11 @@ class ProductCard extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
         // Text(product['title'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),
-        TitleDefault(product['title']),
+        TitleDefault(product.title),
         SizedBox(width: 8.0,),
-        Text(' (' + (product['price'].toString()) + ' €.)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),
+        Text(' (' + (product.price.toString()) + ' €.)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),
         SizedBox(width: 8.0,),
-        PriceTag(product['price'].toString())
+        PriceTag(product.price.toString())
         // Container(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
         //           decoration: BoxDecoration(color: Theme.of(context).accentColor, borderRadius: BorderRadius.circular(5.0)), 
         //           child: Text('\$ ${product['price'].toString()}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),)        
@@ -83,7 +84,7 @@ class ProductCard extends StatelessWidget{
     return Card(
       child: Column(
         children: <Widget>[
-                            Image.asset(product['image']), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
+                            Image.asset(product.image), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
                             // SizedBox(height: 5.0,),
                             _buildTitlePriceRow(),
                             DecoratedBox(

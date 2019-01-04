@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'product_card.dart';
+import '../../models/product.dart';
 
 class Products extends StatelessWidget { // questa classe contiene la lista dei prodotti aggiunti
-  final List<Map<String, dynamic>> products;
+  final List<Product> products;
   
   Products(this.products) {
     // nota bene ciò che viene passato come parametro del costruttore va ad inizializzare direttamente "this.products"!!

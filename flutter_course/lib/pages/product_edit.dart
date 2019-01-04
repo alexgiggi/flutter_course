@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/helpers/ensure-visible.dart';
-
+import '../models/product.dart';
 class ProductEditPage extends StatefulWidget{
   
   // final List<Map<String, String>> _products;
@@ -8,7 +8,7 @@ class ProductEditPage extends StatefulWidget{
 
   final Function addProduct;
   final Function updateProduct;
-  final Map<String, dynamic> product;
+  final Product product;
   final int productIndex;
 
   ProductEditPage({this.addProduct,this.updateProduct, this.product, this.productIndex});
@@ -27,12 +27,19 @@ class _ProductEditPageState extends State<ProductEditPage>{
   // String _descriptionValue = '';
   // double _priceValue = 0.0;
 
-  final Map<String, dynamic> _formData = {
-    'title':'',
-    'description':null,
-    'price':null,
-    'image': 'assets/food.jpg'
-  };
+  // final Map<String, dynamic> _formData = {
+  //   'title':'',
+  //   'description':null,
+  //   'price':null,
+  //   'image': 'assets/food.jpg'
+  // };
+
+ Product _formData = Product(
+    title: '',
+    description: '',
+    price: 0,
+    image: 'assets/food.jpg'
+  );
 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -45,7 +52,7 @@ class _ProductEditPageState extends State<ProductEditPage>{
           focusNode: _titleFocusNode,
           child: TextFormField(
             focusNode: _titleFocusNode,
-        initialValue: widget.product==null ? '' : widget.product['title'],
+        initialValue: widget.product==null ? '' : widget.product.title,
         validator: (String value){
           if (value.isEmpty || value.trim().length<=0){
             return 'Title is required';
@@ -64,7 +71,10 @@ class _ProductEditPageState extends State<ProductEditPage>{
         onSaved: (String value){
           // setState(() {
                     // _titleValue = value;  
-            _formData['title'] = value;
+            Product newp = Product(title: value, description: _formData.description, price: _formData.price, image: _formData.image);
+            _formData = newp;
+
+            //_formData.title = value;
                     // });
         },
       )
@@ -76,7 +86,7 @@ class _ProductEditPageState extends State<ProductEditPage>{
       focusNode: _descriptionFocusNode,
       child: TextFormField(
               focusNode: _descriptionFocusNode,
-              initialValue: widget.product==null ? '' : widget.product['description'],
+              initialValue: widget.product==null ? '' : widget.product.description,
               decoration: InputDecoration(labelText: 'Product Description'),
               autofocus: true,
               maxLines: 3,
@@ -88,7 +98,9 @@ class _ProductEditPageState extends State<ProductEditPage>{
 
             onSaved: (String value){
                 // setState(() {
-                          _formData['description'] = value;
+                          //_formData['description'] = value;
+                          Product newp = Product(title: _formData.description, description: value, price: _formData.price, image: _formData.image);
+                          _formData = newp;
                           // });
               }
 
@@ -101,7 +113,7 @@ class _ProductEditPageState extends State<ProductEditPage>{
       focusNode: _priceFocusNode,
       child: TextFormField(
               focusNode: _priceFocusNode,
-              initialValue: widget.product==null ? '' : widget.product['price'],
+              initialValue: widget.product==null ? '' : widget.product.price,
               decoration: InputDecoration(labelText: 'Product price'),
               validator: (String value){
                 if (value.isEmpty || !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)){
@@ -119,7 +131,9 @@ class _ProductEditPageState extends State<ProductEditPage>{
 
               onSaved: (String value){
                 // setState(() {
-                  _formData['price'] = value;
+                  //_formData['price'] = value;
+                  Product newp = Product(title: _formData.description, description: _formData.description, price: double.parse(value), image: _formData.image);
+                  _formData = newp;
                   // });
               }
 
@@ -173,7 +187,7 @@ class _ProductEditPageState extends State<ProductEditPage>{
       _buildDescriptionTextField(),
       _buildPriceTextField(),
       SizedBox(height: 10.0,),
-      Text(_formData['title']),
+      Text(_formData.title),
       SizedBox(height: 10.0,),
       RaisedButton(
         child: Text('Save'), 
