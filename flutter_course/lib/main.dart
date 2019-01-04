@@ -31,11 +31,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   List<Map<String, dynamic>> _products = [];
 
-  void _updateProduct(Map<String, dynamic> product) {
+  void _addProduct(Map<String, dynamic> product) {
     // funzione da passare al widget ProductControl per l'aggiunta di prodotti
     setState(() //--> il setState forza la chiamata a build
         {
       _products.add(product);
+      print(_products);
+    });
+  }
+
+  void _updateProduct(int index, Map<String, dynamic> product) {
+    setState(
+      () //--> il setState forza la chiamata a build
+        {
+      _products[index] = product;
       print(_products);
     });
   }
@@ -54,12 +63,14 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
             brightness: Brightness.light,
             primarySwatch: Colors.deepOrange,
-            accentColor: Colors.deepPurple),
+            accentColor: Colors.deepPurple,
+            buttonColor: Colors.yellow
+            ),
         // home: AuthPage(), // vedi commento sotto relativo alla route '/'
         routes: {
           '/': (BuildContext context) => AuthPage(),    // se specifico questo route allora devo commentare la riga in cui vado a definire la home
           '/products': (BuildContext context) => ProductsPage(_products),   
-          '/admin': (BuildContext context) => ProductsAdminPage(_updateProduct, _deleteProduct),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
+          '/admin': (BuildContext context) => ProductsAdminPage(_addProduct, _updateProduct, _deleteProduct, _products),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
                                                                     // Navigator.pushReplacementNamed(context, '/admin');
           /*                                                                   
            // la route sottostante non si può usare perchè è parametrizzata rispetto al valore di index, per cui si usa la onGenerateRoute
@@ -80,7 +91,7 @@ class _MyAppState extends State<MyApp> {
             final int index = int.parse(pathElements[2]);
             return MaterialPageRoute<MiaClasse>(
                 builder: (BuildContext context) => ProductPage(
-                    _products[index]['title'], _products[index]['image']));
+                    _products[index]['title'], _products[index]['image'], double.parse(_products[index]['price']), _products[index]['description']));
           }
 
           return null;
