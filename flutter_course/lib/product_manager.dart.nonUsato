@@ -75,7 +75,7 @@ class ProductManager extends StatelessWidget {
                               */
                               
                               // Container(height: 300.0,child: Products(_products))
-                              Expanded(child: Products(products)) // --> widget che contiene la lista dei prodotti. Expanded è 
+                              Expanded(child: Products()) // --> widget che contiene la lista dei prodotti. Expanded è 
                                                                                                  // un tipo di widget che si espande all'aumentare degli oggetti
                                                                                                  // in esso contenuti.
                             ] //end children

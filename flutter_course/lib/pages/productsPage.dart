@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 //import '../product_manager.dart';
 import '../widgets/products/products.dart';
-import '../models/product.dart';
+//import '../models/product.dart';
 
 class ProductsPage extends StatelessWidget {
 
-final List<Product> products;
-  
-  ProductsPage(this.products);
+// final List<Product> products;
+//   ProductsPage(this.products);
 
   Widget _buildSideDrawer(BuildContext context){
     return Drawer(
@@ -49,7 +48,7 @@ final List<Product> products;
         ],
       ),
       // body: ProductManager(/*startingProduct: 'food Tester'*/products),
-      body: Products(products),
+      body: Products(),
     );
   }
 }

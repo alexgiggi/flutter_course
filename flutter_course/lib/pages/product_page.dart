@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'miaClasse.dart';
 import 'dart:async';
 import '../ui_elements/title_default.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped-models/products.dart';
+import '../models/product.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatelessWidget 
+{
 
-  final String title;
-  final String imageUrl;
-  final double price;
-  final String description;
+  final int productIndex;
 
-  ProductPage(this. title, this.imageUrl, this.price, this.description);
+  ProductPage(this.productIndex);
 
-  Widget _buildAddressPriceRow(){
+  Widget _buildAddressPriceRow(double price)
+  {    
     return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -58,25 +60,28 @@ class ProductPage extends StatelessWidget {
       //return Future.value(false); //se chiamo solo questa funzione con parametro false è come se annullassi il back, il true fa passare il back
       return Future.value(true);
     },
-    child: Scaffold(
-      appBar: AppBar(
-          title: Text(this.title),
+    child: ScopedModelDescendant<ProductsModel>(
+      builder: (BuildContext context, Widget child, ProductsModel model){
+          Product product = model.products[productIndex];
+          return Scaffold(
+          appBar: AppBar(
+          title: Text(product.title),
           // automaticallyImplyLeading: false // --> disabilita il pulsante di back per questa pagina
           ),
       body: Center(child: Column(
         // mainAxisAlignment:MainAxisAlignment.center, // Allineamento verticale
         crossAxisAlignment: CrossAxisAlignment.center, // Allineamento orizzontale
         children: <Widget>[
-          Image.asset(this.imageUrl),
+          Image.asset(product.image),
           Container(padding: EdgeInsets.all(20.0),
           // child: Text(title, style: TextStyle(fontSize: 26.0, fontFamily: 'Oswald', fontWeight: FontWeight.bold),)
-          child: TitleDefault(title)
+          child: TitleDefault(product.title)
           ,),
-          _buildAddressPriceRow(),
+          _buildAddressPriceRow(product.price),
           Container(
             padding: EdgeInsets.all(10.0) ,
             //alignment: Alignment.center,
-            child: Text(description, style: TextStyle(fontFamily: 'Oswald', color: Colors.grey), textAlign: TextAlign.justify)
+            child: Text(product.description, style: TextStyle(fontFamily: 'Oswald', color: Colors.grey), textAlign: TextAlign.justify)
           // Container(padding: EdgeInsets.all(0.0),child: RaisedButton(
           //   color: Theme.of(context).accentColor, textColor: Colors.yellowAccent,
           //   child: Text('Delete and back', textAlign: TextAlign.center,), onPressed: () {
@@ -86,6 +91,8 @@ class ProductPage extends StatelessWidget {
           )
         ],
       ),) 
-    )); 
+    );
+      },) 
+    ); 
   }
 }

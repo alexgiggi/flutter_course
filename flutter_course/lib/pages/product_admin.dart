@@ -7,13 +7,14 @@ import '../models/product.dart';
 
 class ProductsAdminPage extends StatelessWidget{
   
-  final Function addProduct;
-  final Function deleteProduct;
-  final Function updateProduct;
+  // final Function addProduct;
+  // final Function deleteProduct;
+  // final Function updateProduct;
 
-  final List<Product> products;
+  // final List<Product> products;
 
-  ProductsAdminPage(this.addProduct, this.updateProduct , this.deleteProduct, this.products);
+  // ProductsAdminPage(this.addProduct, this.updateProduct , this.deleteProduct, this.products);
+  ProductsAdminPage();
 
   Widget _buildSideDrawer(BuildContext context){
     return Drawer(
@@ -52,8 +53,10 @@ class ProductsAdminPage extends StatelessWidget{
           ),
           body: TabBarView(
             children: <Widget>[
-              ProductEditPage(addProduct: addProduct),
-              ProductListPage(products, updateProduct, deleteProduct)
+              // ProductEditPage(addProduct: addProduct),
+              // ProductListPage(products, updateProduct, deleteProduct)
+              ProductEditPage(),
+              ProductListPage()
             ],
           ),
         ));
