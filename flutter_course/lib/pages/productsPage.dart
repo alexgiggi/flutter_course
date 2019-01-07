@@ -3,23 +3,26 @@ import 'package:flutter/material.dart';
 import '../widgets/products/products.dart';
 //import '../models/product.dart';
 
-class ProductsPage extends StatelessWidget {
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped-models/products.dart';
 
+class ProductsPage extends StatelessWidget {
 // final List<Product> products;
 //   ProductsPage(this.products);
 
-  Widget _buildSideDrawer(BuildContext context){
+  Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
-        child: Column(
-          children: <Widget>[
-            AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Choose'),
-            ),
-            ListTile(
-              leading: Icon(Icons.edit),
-              title: Text('Manage Product'),
-              onTap: () {/*
+      child: Column(
+        children: <Widget>[
+          AppBar(
+            automaticallyImplyLeading: false,
+            title: Text('Choose'),
+          ),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('Manage Product'),
+            onTap: () {
+              /*
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -27,12 +30,12 @@ class ProductsPage extends StatelessWidget {
                                   leading: Icon(Icons.edit),: (BuildContext context) =>
                                       ProductsAdminPage()));
                                       */
-                          Navigator.pushReplacementNamed(context, '/admin');
-              },
-            )
-          ],
-        ),
-      );
+              Navigator.pushReplacementNamed(context, '/admin');
+            },
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -42,8 +45,15 @@ class ProductsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('EasyList'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.favorite),
-          onPressed: (){},
+          ScopedModelDescendant<ProductsModel>(
+            builder: (BuildContext context, Widget child, ProductsModel model) {
+              return IconButton(
+                icon: Icon(model.displayFavoritesOnly ? Icons.favorite: Icons.favorite_border),
+                onPressed: () {
+                  model.toggleDisplayMode();
+                },
+              );
+            },
           )
         ],
       ),

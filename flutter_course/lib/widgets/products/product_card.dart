@@ -5,6 +5,9 @@ import '../../ui_elements/title_default.dart';
 import './address_tag.dart'; 
 import '../../models/product.dart';
 
+import '../../scoped-models/products.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 class ProductCard extends StatelessWidget{
   final Product product;
   final int productIndex;
@@ -32,7 +35,8 @@ class ProductCard extends StatelessWidget{
   }
 
   Widget _buildActionButton(BuildContext context){
-    return ButtonBar(
+    return  ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){
+      return ButtonBar(
                               alignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 FlatButton(
@@ -65,18 +69,25 @@ class ProductCard extends StatelessWidget{
                                   
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.favorite_border),
+                                  icon: Icon(model.products[productIndex].isFavorite ? Icons.favorite : Icons.favorite_border),
                                   color: Colors.redAccent,
                                   iconSize: 40.0,
                                   
-                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + productIndex.toString()).then((MiaClasse value) 
+                                  onPressed: (){
+                                    model.selectProduct(productIndex);
+                                    model.toggleProductFavoriteStatus();
+                                  }
+                                              /*
+                                              Navigator.pushNamed<MiaClasse>(context,'/product/' + productIndex.toString()).then((MiaClasse value) 
                                               { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
                                                 print('funzione che cattura il back (Navigator.pop)');                                                
                                               }),
+                                              */
                                   
                                 )
                               ],
                             );
+    },);
   }
   @override
   Widget build(BuildContext context) {

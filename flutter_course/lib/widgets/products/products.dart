@@ -38,7 +38,7 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
   Widget build(BuildContext context) // chiamato dopo il costruttore ma anche ogni volta che c'è un cambiamento di stato 
   {
     return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){ // funzione richiamata ogni volta che il model subisce una modifica dei suoi dati!!
-      return _buildProductList(model.products);
+      return _buildProductList(model.displayedProducts);
     },);
     
 
