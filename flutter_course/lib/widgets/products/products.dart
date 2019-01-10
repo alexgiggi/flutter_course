@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'product_card.dart';
 import '../../models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../../scoped-models/products.dart';
+import '../../scoped-models/main.dart';
+
 
 class Products extends StatelessWidget { // questa classe contiene la lista dei prodotti aggiunti
   // final List<Product> products;
@@ -37,7 +38,7 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
   @override
   Widget build(BuildContext context) // chiamato dopo il costruttore ma anche ogni volta che c'è un cambiamento di stato 
   {
-    return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){ // funzione richiamata ogni volta che il model subisce una modifica dei suoi dati!!
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){ // funzione richiamata ogni volta che il model subisce una modifica dei suoi dati!!
       return _buildProductList(model.displayedProducts);
     },);
     

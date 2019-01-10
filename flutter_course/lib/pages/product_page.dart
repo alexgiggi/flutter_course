@@ -3,7 +3,7 @@ import 'miaClasse.dart';
 import 'dart:async';
 import '../ui_elements/title_default.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../scoped-models/products.dart';
+import '../scoped-models/main.dart';
 import '../models/product.dart';
 
 class ProductPage extends StatelessWidget 
@@ -60,9 +60,9 @@ class ProductPage extends StatelessWidget
       //return Future.value(false); //se chiamo solo questa funzione con parametro false è come se annullassi il back, il true fa passare il back
       return Future.value(true);
     },
-    child: ScopedModelDescendant<ProductsModel>(
-      builder: (BuildContext context, Widget child, ProductsModel model){
-          Product product = model.products[productIndex];
+    child: ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model){
+          Product product = model.allProducts[productIndex];
           return Scaffold(
           appBar: AppBar(
           title: Text(product.title),
@@ -72,7 +72,8 @@ class ProductPage extends StatelessWidget
         // mainAxisAlignment:MainAxisAlignment.center, // Allineamento verticale
         crossAxisAlignment: CrossAxisAlignment.center, // Allineamento orizzontale
         children: <Widget>[
-          Image.asset(product.image),
+          //Image.asset(product.image),
+          Image.network(product.image),
           Container(padding: EdgeInsets.all(20.0),
           // child: Text(title, style: TextStyle(fontSize: 26.0, fontFamily: 'Oswald', fontWeight: FontWeight.bold),)
           child: TitleDefault(product.title)

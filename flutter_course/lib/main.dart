@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_course/scoped-models/products.dart';
 import './pages/product_admin.dart';
 import './pages/product_page.dart';
 import './pages/productsPage.dart';
 import './pages/miaClasse.dart';
 import './pages/auth.dart';
-import './models/product.dart';
+//import 'package:flutter_course/scoped-models/products.dart';
+import 'package:flutter_course/scoped-models/main.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 
@@ -75,8 +75,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<ProductsModel>(
-      model: ProductsModel(),
+    final MainModel model = MainModel();
+    return ScopedModel<MainModel>(
+      model: model,
       child: MaterialApp(
         // debugShowMaterialGrid: true,
         theme: ThemeData(
@@ -88,7 +89,7 @@ class _MyAppState extends State<MyApp> {
         // home: AuthPage(), // vedi commento sotto relativo alla route '/'
         routes: {
           '/': (BuildContext context) => AuthPage(),    // se specifico questo route allora devo commentare la riga in cui vado a definire la home
-          '/products': (BuildContext context) => ProductsPage(),   
+          '/products': (BuildContext context) => ProductsPage(model),   
           '/admin': (BuildContext context) => ProductsAdminPage(),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
                                                                     // Navigator.pushReplacementNamed(context, '/admin');
           /*                                                                   
@@ -116,7 +117,7 @@ class _MyAppState extends State<MyApp> {
         },
         onUnknownRoute: (RouteSettings settings){ // richiamata quando viene cercato un path route non registrato oppure quando la funzione 'onGenerateRoute' restituisce null
                                                   // al posto di un valido 'MaterialPageRoute'
-          return MaterialPageRoute(builder: (BuildContext context) => ProductsPage());
+          return MaterialPageRoute(builder: (BuildContext context) => ProductsPage(model));
         },
         )); 
   }

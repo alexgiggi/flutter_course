@@ -5,7 +5,7 @@ import '../../ui_elements/title_default.dart';
 import './address_tag.dart'; 
 import '../../models/product.dart';
 
-import '../../scoped-models/products.dart';
+import '../../scoped-models/main.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProductCard extends StatelessWidget{
@@ -35,7 +35,7 @@ class ProductCard extends StatelessWidget{
   }
 
   Widget _buildActionButton(BuildContext context){
-    return  ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){
+    return  ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       return ButtonBar(
                               alignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget{
                                   
                                 ),
                                 IconButton(
-                                  icon: Icon(model.products[productIndex].isFavorite ? Icons.favorite : Icons.favorite_border),
+                                  icon: Icon(model.allProducts[productIndex].isFavorite ? Icons.favorite : Icons.favorite_border),
                                   color: Colors.redAccent,
                                   iconSize: 40.0,
                                   
@@ -95,7 +95,8 @@ class ProductCard extends StatelessWidget{
     return Card(
       child: Column(
         children: <Widget>[
-                            Image.asset(product.image), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
+                            //Image.asset(product.image), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
+                            Image.network(product.image), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
                             // SizedBox(height: 5.0,),
                             _buildTitlePriceRow(),
                             DecoratedBox(
@@ -109,6 +110,7 @@ class ProductCard extends StatelessWidget{
                                 ),
                               ),
                             // sText(product['title']),
+                            Text(product.userEmail),
                             _buildActionButton(context)
         ],
       ),

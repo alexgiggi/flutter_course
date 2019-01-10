@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/helpers/ensure-visible.dart';
 import '../models/product.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../scoped-models/products.dart';
+import '../scoped-models/main.dart';
 
 class ProductEditPage extends StatefulWidget{
   
@@ -132,7 +132,7 @@ final Map<String, dynamic> _formData = {
             );
   }
 
-  _submitForm(Function addProduct, Function updateProduct, [int selectedProductIndex]){
+  _submitForm(Function addProduct, Function updateProduct, Function setSelectedProduct, [int selectedProductIndex]){
     
     if (!_formKey.currentState.validate())
     {  
@@ -144,38 +144,38 @@ final Map<String, dynamic> _formData = {
 
     if (selectedProductIndex==null){
       // modalità aggiunta nuovo elemento da zero (ADD)
-      addProduct(Product(
-            title: _formData['title'],
-            description: _formData['description'],
-            price: double.parse(_formData['price']),
-            image: _formData['image']),
-      );
+      addProduct(
+            _formData['title'],
+            _formData['description'],
+            _formData['image'],
+            double.parse(_formData['price'])
+            ).then((_){
+              Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
+            });
     }
     else{
       // modalità aggiunta nuovo elemento da copia altro elemento (UPDATE)
       updateProduct(
-        Product(
-            title: _formData['title'],
-            description: _formData['description'],
-            price: double.parse(_formData['price']),
-            image: _formData['image']),
-      );
+            _formData['title'],
+            _formData['description'],
+            _formData['image'],
+            double.parse(_formData['price']));
     }
 
     // final Map<String, dynamic> product = {'title': _formData['title'], 'description': _formData['description'], 'price': _formData['price'], 'image': 'assets/food.jpg'};
     // final Map<String, dynamic> product = _formData;
     
-    Navigator.pushReplacementNamed(context, '/products');
+    
   }
 
   Widget _buildSubmitButton(){
-    return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){
-      return RaisedButton(
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
+      return model.isLoading? Center(child: CircularProgressIndicator(),) : RaisedButton(
         child: Text('Save'), 
         color: Theme.of(context).accentColor,
         textColor: Colors.white,
         // onPressed: _submitForm(model.addProduct, model.updateProduct));
-        onPressed: () => _submitForm(model.addProduct, model.updateProduct, model.selectedProductIndex),);
+        onPressed: () => _submitForm(model.addProduct, model.updateProduct,model.selectProduct, model.selectedProductIndex),);
     },); 
   }
 
@@ -219,7 +219,7 @@ final Map<String, dynamic> _formData = {
 
   @override
   Widget build(BuildContext context){
-    return ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       final Widget pageContent = _buildPageContent(context, model.selectedProduct);      
       return model.selectedProductIndex == null ? pageContent : Scaffold(appBar: AppBar(title: Text('Edit Product'),),body: pageContent,);
     },); 

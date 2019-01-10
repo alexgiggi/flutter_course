@@ -4,11 +4,29 @@ import '../widgets/products/products.dart';
 //import '../models/product.dart';
 
 import 'package:scoped_model/scoped_model.dart';
-import '../scoped-models/products.dart';
+import '../scoped-models/main.dart';
 
-class ProductsPage extends StatelessWidget {
-// final List<Product> products;
-//   ProductsPage(this.products);
+class ProductsPage extends StatefulWidget {
+
+  final MainModel model;
+
+  ProductsPage(this.model);
+
+  @override
+  State<StatefulWidget> createState() {
+    
+    return _ProductsPageState();
+  }
+
+}
+
+class _ProductsPageState extends State<ProductsPage>{
+
+  @override
+  initState(){
+    widget.model.fetchProducts();
+    super.initState();
+  }
 
   Widget _buildSideDrawer(BuildContext context) {
     return Drawer(
@@ -45,8 +63,8 @@ class ProductsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('EasyList'),
         actions: <Widget>[
-          ScopedModelDescendant<ProductsModel>(
-            builder: (BuildContext context, Widget child, ProductsModel model) {
+          ScopedModelDescendant<MainModel>(
+            builder: (BuildContext context, Widget child, MainModel model) {
               return IconButton(
                 icon: Icon(model.displayFavoritesOnly ? Icons.favorite: Icons.favorite_border),
                 onPressed: () {
@@ -58,7 +76,28 @@ class ProductsPage extends StatelessWidget {
         ],
       ),
       // body: ProductManager(/*startingProduct: 'food Tester'*/products),
-      body: Products(),
+      body: _buildProductsList(),
     );
   }
+
+  Widget _buildProductsList(){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
+      
+      Widget content = Center(child: Text('No Products found'));
+
+      if (model.displayedProducts.length>0 && !model.isLoading){
+
+        content = Products();
+
+      } else if(model.isLoading){
+
+          content = Center(child: CircularProgressIndicator(),);
+
+      }
+
+      return content;
+
+    },);
+  }
+
 }
