@@ -41,7 +41,7 @@ class ProductCard extends StatelessWidget{
                               children: <Widget>[
                                 FlatButton(
                                   child: Text('Details'),
-                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + productIndex.toString()).then((MiaClasse value) 
+                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + model.allProducts[productIndex].id).then((MiaClasse value) 
                                               { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
                                                 print('funzione che cattura il back (Navigator.pop)');
                                                 /*
@@ -62,7 +62,7 @@ class ProductCard extends StatelessWidget{
                                   icon: Icon(Icons.info),
                                   iconSize: 40.0,
                                   color: Theme.of(context).accentColor,
-                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + productIndex.toString()).then((MiaClasse value) 
+                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + model.allProducts[productIndex].id).then((MiaClasse value) 
                                               { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
                                                 print('funzione che cattura il back (Navigator.pop)');                                                
                                               }),
@@ -74,7 +74,7 @@ class ProductCard extends StatelessWidget{
                                   iconSize: 40.0,
                                   
                                   onPressed: (){
-                                    model.selectProduct(productIndex);
+                                    model.selectProduct(model.allProducts[productIndex].id);
                                     model.toggleProductFavoriteStatus();
                                   }
                                               /*
@@ -96,7 +96,10 @@ class ProductCard extends StatelessWidget{
       child: Column(
         children: <Widget>[
                             //Image.asset(product.image), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
-                            Image.network(product.image), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
+                            FadeInImage(image: NetworkImage(product.image), 
+                            height: 300.0, 
+                            fit: BoxFit.cover,
+                            placeholder: AssetImage('assets/food.jpg'),) , 
                             // SizedBox(height: 5.0,),
                             _buildTitlePriceRow(),
                             DecoratedBox(

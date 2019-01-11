@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import './product_edit.dart';
 import './product_list.dart';
-import '../models/product.dart';
+import '../scoped-models/main.dart';
 
 // import './productsPage.dart';
 
 class ProductsAdminPage extends StatelessWidget{
   
+  final MainModel model;  
+
+
   // final Function addProduct;
   // final Function deleteProduct;
   // final Function updateProduct;
@@ -14,7 +17,7 @@ class ProductsAdminPage extends StatelessWidget{
   // final List<Product> products;
 
   // ProductsAdminPage(this.addProduct, this.updateProduct , this.deleteProduct, this.products);
-  ProductsAdminPage();
+  ProductsAdminPage(this.model);
 
   Widget _buildSideDrawer(BuildContext context){
     return Drawer(
@@ -56,7 +59,7 @@ class ProductsAdminPage extends StatelessWidget{
               // ProductEditPage(addProduct: addProduct),
               // ProductListPage(products, updateProduct, deleteProduct)
               ProductEditPage(),
-              ProductListPage()
+              ProductListPage(model)
             ],
           ),
         ));

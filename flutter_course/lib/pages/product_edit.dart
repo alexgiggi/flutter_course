@@ -142,15 +142,24 @@ final Map<String, dynamic> _formData = {
     
     _formKey.currentState.save();
 
-    if (selectedProductIndex==null){
+    if (selectedProductIndex==-1){
       // modalità aggiunta nuovo elemento da zero (ADD)
       addProduct(
             _formData['title'],
             _formData['description'],
             _formData['image'],
             double.parse(_formData['price'])
-            ).then((_){
-              Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
+            ).then((bool success){
+              if (success){
+                Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
+              } else{
+                showDialog(context: context, builder: (BuildContext context){
+                  return AlertDialog(title: Text('Somthing went wrong'), content: Text('Please try again'), actions: <Widget>[
+                    FlatButton(child: Text('Okay'), onPressed: ()=> Navigator.of(context).pop())
+                  ],);
+                });
+              }
+              
             });
     }
     else{
@@ -159,7 +168,9 @@ final Map<String, dynamic> _formData = {
             _formData['title'],
             _formData['description'],
             _formData['image'],
-            double.parse(_formData['price']));
+            double.parse(_formData['price'])).then((_){
+              Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
+            });;
     }
 
     // final Map<String, dynamic> product = {'title': _formData['title'], 'description': _formData['description'], 'price': _formData['price'], 'image': 'assets/food.jpg'};
@@ -221,7 +232,7 @@ final Map<String, dynamic> _formData = {
   Widget build(BuildContext context){
     return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       final Widget pageContent = _buildPageContent(context, model.selectedProduct);      
-      return model.selectedProductIndex == null ? pageContent : Scaffold(appBar: AppBar(title: Text('Edit Product'),),body: pageContent,);
+      return model.selectedProductIndex == -1 ? pageContent : Scaffold(appBar: AppBar(title: Text('Edit Product'),),body: pageContent,);
     },); 
 
 

@@ -3,8 +3,28 @@ import './product_edit.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped-models/main.dart';
 
-class ProductListPage extends StatelessWidget {
-  
+class ProductListPage extends StatefulWidget {
+
+  final MainModel model;  
+
+  ProductListPage(this.model);
+
+  @override
+  State<StatefulWidget> createState() {
+    
+    return _ProductListPageState();
+  }
+
+}
+
+class _ProductListPageState extends State<ProductListPage>{
+
+  @override
+  initState(){ // questa classe è diventata stateful solo per poter utilizzare questa funzione
+    widget.model.fetchProducts();
+    super.initState();
+  }
+
   Widget _buildEditButton(BuildContext context, int index, MainModel productsModel){
     
       return IconButton(
@@ -13,7 +33,7 @@ class ProductListPage extends StatelessWidget {
                 size: 30.0,
               ),
               onPressed: () {
-                productsModel.selectProduct(index);
+                productsModel.selectProduct(productsModel.allProducts[index].id);
                 Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                   return ProductEditPage();
                 })).then((_){
@@ -36,7 +56,7 @@ class ProductListPage extends StatelessWidget {
             background: Container(color: Colors.red,child: Text('NO!! CAZZO!!',style: TextStyle(color: Colors.white ,fontSize: 80, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),),
             onDismissed: (DismissDirection direction){
               
-              model.selectProduct(index);
+              model.selectProduct(model.allProducts[index].id);
               
               if(direction==DismissDirection.endToStart){
                 model.deleteProduct();

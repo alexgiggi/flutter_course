@@ -8,10 +8,9 @@ import '../models/product.dart';
 
 class ProductPage extends StatelessWidget 
 {
+  final Product product;
 
-  final int productIndex;
-
-  ProductPage(this.productIndex);
+  ProductPage(this.product);
 
   Widget _buildAddressPriceRow(double price)
   {    
@@ -60,10 +59,7 @@ class ProductPage extends StatelessWidget
       //return Future.value(false); //se chiamo solo questa funzione con parametro false è come se annullassi il back, il true fa passare il back
       return Future.value(true);
     },
-    child: ScopedModelDescendant<MainModel>(
-      builder: (BuildContext context, Widget child, MainModel model){
-          Product product = model.allProducts[productIndex];
-          return Scaffold(
+    child: Scaffold(
           appBar: AppBar(
           title: Text(product.title),
           // automaticallyImplyLeading: false // --> disabilita il pulsante di back per questa pagina
@@ -73,7 +69,10 @@ class ProductPage extends StatelessWidget
         crossAxisAlignment: CrossAxisAlignment.center, // Allineamento orizzontale
         children: <Widget>[
           //Image.asset(product.image),
-          Image.network(product.image),
+          FadeInImage(image: NetworkImage(product.image), 
+                            height: 300.0, 
+                            fit: BoxFit.cover,
+                            placeholder: AssetImage('assets/food.jpg'),),
           Container(padding: EdgeInsets.all(20.0),
           // child: Text(title, style: TextStyle(fontSize: 26.0, fontFamily: 'Oswald', fontWeight: FontWeight.bold),)
           child: TitleDefault(product.title)
@@ -92,8 +91,7 @@ class ProductPage extends StatelessWidget
           )
         ],
       ),) 
-    );
-      },) 
+    )       
     ); 
   }
 }

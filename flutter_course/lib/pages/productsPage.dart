@@ -23,7 +23,7 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage>{
 
   @override
-  initState(){
+  initState(){ // questa classe è diventata stateful solo per poter utilizzare questa funzione, stessa cosa per la classe product_list
     widget.model.fetchProducts();
     super.initState();
   }
@@ -95,7 +95,7 @@ class _ProductsPageState extends State<ProductsPage>{
 
       }
 
-      return content;
+      return RefreshIndicator(onRefresh: model.fetchProducts, child: content,);
 
     },);
   }

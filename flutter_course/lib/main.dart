@@ -7,7 +7,7 @@ import './pages/auth.dart';
 //import 'package:flutter_course/scoped-models/products.dart';
 import 'package:flutter_course/scoped-models/main.dart';
 import 'package:scoped_model/scoped_model.dart';
-
+import './models/product.dart';
 
 // import './pages/productsPage.dart';
 
@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (BuildContext context) => AuthPage(),    // se specifico questo route allora devo commentare la riga in cui vado a definire la home
           '/products': (BuildContext context) => ProductsPage(model),   
-          '/admin': (BuildContext context) => ProductsAdminPage(),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
+          '/admin': (BuildContext context) => ProductsAdminPage(model),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
                                                                     // Navigator.pushReplacementNamed(context, '/admin');
           /*                                                                   
            // la route sottostante non si può usare perchè è parametrizzata rispetto al valore di index, per cui si usa la onGenerateRoute
@@ -102,15 +102,18 @@ class _MyAppState extends State<MyApp> {
           */
         },
         onGenerateRoute: (RouteSettings settings) {
-          final List<String> pathElements = settings.name.split(
-              '/'); // es. product/1 --> avrò una lista in pathElements con 'product' e '1'
+          final List<String> pathElements = settings.name.split('/'); // es. product/1 --> avrò una lista in pathElements con 'product' e '1'
           // mentre /product/1 avrà tre elementi con '', product' e '1'
           if (pathElements[0] != '') return null;
 
           if (pathElements[1] == 'product') {
-            final int index = int.parse(pathElements[2]);
-            return MaterialPageRoute<MiaClasse>(
-                builder: (BuildContext context) => ProductPage(index));
+            final String productId = pathElements[2];
+
+            final Product product = model.allProducts.firstWhere( (Product product){
+              return product.id == productId; 
+            } );
+
+            return MaterialPageRoute<MiaClasse>(builder: (BuildContext context) => ProductPage(product));
           }
 
           return null;
