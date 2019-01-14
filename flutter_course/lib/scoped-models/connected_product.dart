@@ -13,7 +13,7 @@ mixin ConnectedProductsModel on Model {
   User authenticatedUser;
   bool _isLoading = false;
 
-  Future<bool> addProduct(String title, String description, String image, double price) {
+  Future<bool> addProduct(String title, String description, String image, double price) async {
     
     _isLoading = true;
     notifyListeners();
@@ -27,45 +27,57 @@ mixin ConnectedProductsModel on Model {
       'userId': authenticatedUser.id
     };
 
-    return http.post('https://flutter-products-ap.firebaseio.com/products.jsonX', body: jsonEncode(productData)).then((http.Response response){
+    try{
+          final http.Response response = await http.post('https://flutter-products-ap.firebaseio.com/products.json', body: jsonEncode(productData));
+          // .then((http.Response response){
 
-      if (response.statusCode != 200 && response.statusCode != 201){
+            if (response.statusCode != 200 && response.statusCode != 201){
+              print('errore, codice ' + response.statusCode.toString());
+              _isLoading = false;
+              notifyListeners();
+              // Errore http/servizio
+              return false;
+            }  
+
+            final Map<String, dynamic> responseData = jsonDecode(response.body);
+            print(responseData);
+
+            // funzione da passare al widget ProductControl per l'aggiunta di prodotti
+            final Product newProduct = Product(
+              id: responseData['name'],
+              title: title, 
+              description: description, 
+              image: image, 
+              price: price, 
+              userEmail: authenticatedUser.eMail, 
+              userId: authenticatedUser.id);
+
+            _products.add(newProduct);
+
+            //_selProductIndex = null;
+            print('Prodotti:' + newProduct.toString());
+
+            _isLoading = false;
+
+            notifyListeners();
+
+            return true; 
+    }
+    catch (error){
+        print('errore catturato: ' + error.toString());
         _isLoading = false;
         notifyListeners();
         // Errore http/servizio
         return false;
-      }  
-
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
-      print(responseData);
-
-      // funzione da passare al widget ProductControl per l'aggiunta di prodotti
-      final Product newProduct = Product(
-        id: responseData['name'],
-        title: title, 
-        description: description, 
-        image: image, 
-        price: price, 
-        userEmail: authenticatedUser.eMail, 
-        userId: authenticatedUser.id);
-
-      _products.add(newProduct);
-
-      //_selProductIndex = null;
-      print('Prodotti:' + newProduct.toString());
-
-      _isLoading = false;
-
-      notifyListeners();
-
-      return true; 
-      }).catchError((error){
-        print('errore: ' + error.toString());
-        _isLoading = false;
-        notifyListeners();
-        // Errore http/servizio
-        return false;
-      });    
+    }
+      // })
+      // .catchError((error){
+      //   print('errore: ' + error.toString());
+      //   _isLoading = false;
+      //   notifyListeners();
+      //   // Errore http/servizio
+      //   return false;
+      // });    
   }
 }
 
