@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped-models/main.dart';
+import '../models/auth.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _AuthPageState extends State<AuthPage> {
   
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  AuthMode _authMode = AuthMode.Login;
 
   DecorationImage _buildBackgroungImage(){
     return DecorationImage(
@@ -72,11 +74,31 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
+  final TextEditingController _passwordTextController = TextEditingController();
+
+
+  Widget _buildPasswordConfirmTextField() {
+    return TextFormField(
+      decoration: InputDecoration(
+          labelText: 'Confirm password', filled: true, fillColor: Colors.white),
+      obscureText: true,
+      validator: (String value) {
+        if (_passwordTextController.text != value) {
+          return 'Password do not match';
+        }
+      },
+      // onSaved: (String value) {
+      //   _formData['password'] = value;
+      // },
+    );
+  }
+
   Widget _buildPasswordTextField() {
     return TextFormField(
       decoration: InputDecoration(
           labelText: 'Password', filled: true, fillColor: Colors.white),
       obscureText: true,
+      controller: _passwordTextController,
       validator: (String value) {
         if (value.isEmpty || value.length < 6) {
           return 'Password invalid';
@@ -101,16 +123,31 @@ Widget _buildAcceptSwitch() {
     );
   }
 
-void _submitForm(Function login) {
+void _submitForm(Function authenticate) async{
 
     // if (!_formKey.currentState.validate() || !_formData['acceptTerms']) {
     //   return;
     // }
     
     _formKey.currentState.save();
-    login(_formData['email'], _formData['password']);
-    print(_formData);
-    Navigator.pushReplacementNamed(context, '/products');
+    Map<String, dynamic> successInformation;
+
+    successInformation = await authenticate(_formData['email'], _formData['password'], _authMode);
+
+    if (successInformation['success']){
+      print('ok.. ' + successInformation['message']);
+      // Navigator.pushReplacementNamed(context, '/'); --> authenticate tira su l'evento che poi viene catturato dalla main.dart che poi instrada verso altre pagine post-login
+    }
+    else{
+      showDialog(context: context, builder: (BuildContext context){
+        return AlertDialog(title: Text('An error ocourred'), content: Text(successInformation['message']), actions: <Widget>[
+          FlatButton(child: Text('Ok'), onPressed: (){
+            Navigator.of(context).pop();
+          },)
+        ],);
+      });
+    }
+    
   }
 
   @override
@@ -141,16 +178,26 @@ void _submitForm(Function login) {
             _buildEmailTextField(),
             SizedBox(height: 10.9,),
             _buildPasswordTextField(),
+            _authMode == AuthMode.Signup ? _buildPasswordConfirmTextField() : Container(),
             _buildAcceptSwitch(),
             SizedBox(
               height: 10.0,
             ),
+            FlatButton(child: Text('Switch to ${_authMode == AuthMode.Login ? 'Signup' : 'Login'}'), onPressed: (){
+              setState(() {
+                _authMode = _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login; // switch auth mode                
+              });
+              
+            },),
+            SizedBox(
+              height: 10.0,
+            ),
             ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
-              return RaisedButton(
+              return model.isLoading ? CircularProgressIndicator() : RaisedButton(
               color: Theme.of(context).primaryColor,
               textColor: Colors.white,
-              child: Text('LOGIN'),
-              onPressed: ()=> _submitForm(model.login),
+              child: Text(_authMode==AuthMode.Login ? 'LOGIN':'SIGN UP'),
+              onPressed: ()=> _submitForm(model.authenticate),
             );
             },) ,
           ],

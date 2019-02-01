@@ -46,6 +46,30 @@ class MyApp extends StatefulWidget {
 
 
 class _MyAppState extends State<MyApp> {
+
+  final MainModel _model = MainModel();
+  bool _isAuthenticated = false;
+
+  @override
+    void initState() {
+      
+      _model.autoAuthenticate();
+      _model.userSubject.listen((bool isAuthenticated){ // una volta catturato l'evento scateno la setState che a sua volta richiama la build.. :-)
+      
+      // ATTENZIONE: al posto degli eventi e dei listner avremmo potuto utilizzare il metodo noitfyAllListners() nello scoped model che scatena il build
+      // in tutti i descend scoped model, ma a volte i descend 'ricoprono' solo alcune porzioni di elementi (ad esempio solo i pulsanti) e di conseguenza 
+      // solo questi possono essere soggetti a rebuild, d'altronde spostare gli scoped model alle radici dei tree-widget può significare di poter scatenare
+      // rebuild su troppi oggetti per modifiche insignificanti all'interno degli scoped model, per questo magari è preferibile utilizzare lo strumento degli 
+      // eventi sopra illustrato
+
+      setState(() {
+              _isAuthenticated = isAuthenticated;
+            });
+
+      });
+      super.initState();
+    }
+
   // List<Product> _products = [];
 
   // void _addProduct(Product product) {
@@ -75,9 +99,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final MainModel model = MainModel();
+    print('build main page');
+
+    if (_isAuthenticated){
+      print('_isAuthenticated = true');
+    }
+    else{
+      print('_isAuthenticated = false');
+    }
+
     return ScopedModel<MainModel>(
-      model: model,
+      model: _model,
       child: MaterialApp(
         // debugShowMaterialGrid: true,
         theme: ThemeData(
@@ -88,9 +120,10 @@ class _MyAppState extends State<MyApp> {
             ),
         // home: AuthPage(), // vedi commento sotto relativo alla route '/'
         routes: {
-          '/': (BuildContext context) => AuthPage(),    // se specifico questo route allora devo commentare la riga in cui vado a definire la home
-          '/products': (BuildContext context) => ProductsPage(model),   
-          '/admin': (BuildContext context) => ProductsAdminPage(model),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
+          '/': (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductsPage(_model),
+              // se specifico questo route allora devo commentare la riga in cui vado a definire la home
+          // '/products': (BuildContext context) => ProductsPage(_model),   
+          '/admin': (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductsAdminPage(_model),  // questa route viene utilizzata nella pagina 'productsPage.dart' con l'istruzione
                                                                     // Navigator.pushReplacementNamed(context, '/admin');
           /*                                                                   
            // la route sottostante non si può usare perchè è parametrizzata rispetto al valore di index, per cui si usa la onGenerateRoute
@@ -102,6 +135,11 @@ class _MyAppState extends State<MyApp> {
           */
         },
         onGenerateRoute: (RouteSettings settings) {
+
+          if (!_isAuthenticated){
+            return MaterialPageRoute(builder: (BuildContext context) => AuthPage());
+          }
+
           final List<String> pathElements = settings.name.split('/'); // es. product/1 --> avrò una lista in pathElements con 'product' e '1'
           // mentre /product/1 avrà tre elementi con '', product' e '1'
           if (pathElements[0] != '') return null;
@@ -109,18 +147,18 @@ class _MyAppState extends State<MyApp> {
           if (pathElements[1] == 'product') {
             final String productId = pathElements[2];
 
-            final Product product = model.allProducts.firstWhere( (Product product){
+            final Product product = _model.allProducts.firstWhere( (Product product){
               return product.id == productId; 
             } );
 
-            return MaterialPageRoute<MiaClasse>(builder: (BuildContext context) => ProductPage(product));
+            return MaterialPageRoute<MiaClasse>(builder: (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductPage(product));
           }
 
           return null;
         },
         onUnknownRoute: (RouteSettings settings){ // richiamata quando viene cercato un path route non registrato oppure quando la funzione 'onGenerateRoute' restituisce null
                                                   // al posto di un valido 'MaterialPageRoute'
-          return MaterialPageRoute(builder: (BuildContext context) => ProductsPage(model));
+          return MaterialPageRoute(builder: (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductsPage(_model));
         },
         )); 
   }
