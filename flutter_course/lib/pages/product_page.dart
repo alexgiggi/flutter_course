@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'miaClasse.dart';
 import 'dart:async';
 import '../ui_elements/title_default.dart';
-import 'package:scoped_model/scoped_model.dart';
-import '../scoped-models/main.dart';
+// import 'package:scoped_model/scoped_model.dart';
+// import '../scoped-models/main.dart';
 import '../models/product.dart';
+import '../pages/scrolling_map.dart';
 
 class ProductPage extends StatelessWidget 
 {
@@ -12,13 +13,48 @@ class ProductPage extends StatelessWidget
 
   ProductPage(this.product);
 
-  Widget _buildAddressPriceRow(double price)
+  void _showMap(BuildContext context){
+    
+    print('class ProductPage latitudine: ${product.location.latitude}, longitudine: ${product.location.longitude}');
+    
+    Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => Scaffold(appBar: AppBar(title: Text(product.location.address)), body: ScrollingMapPage(product.location.latitude, product.location.longitude))));
+
+    // final List<Marker> markers = <Marker>[Marker('position', 'Position', product.location.latitude,product.location.longitude)];
+    
+    // final cameraPosition = CameraPosition(Location(product.location.latitude, product.location.longitude), 14.0);
+    
+    // final mapView = MapView();
+
+    // mapView.show(MapOptions(
+    //         initialCameraPosition: cameraPosition,
+    //         mapViewType: MapViewType.normal,
+    //         title: 'Product Location'),
+    //         toolbarActions: [ToolbarAction('Close', 1),]);
+
+    // mapView.onToolbarAction.listen((int id) {
+    //   if (id == 1) {
+    //     mapView.dismiss();
+    //   }
+    // });
+    // mapView.onMapReady.listen((_) {
+    //   mapView.setMarkers(markers);
+    // });
+
+  }
+
+  Widget _buildAddressPriceRow(String address, double price, BuildContext context)
   {    
     return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-            Text('Union Square, San Francisco', style: TextStyle(fontFamily: 'Oswald', color: Colors.grey)),
-            SizedBox(width: 10.0,),
+            FlatButton(child: Text(address, style: TextStyle(fontFamily: 'Oswald', color: Colors.grey)),onPressed: (){              
+              _showMap(context);
+            },)  
+            // GestureDetector(child: Text(address, style: TextStyle(fontFamily: 'Oswald', color: Colors.grey)), onTap: (){              
+            //   _showMap(context);
+            // }  
+            // ,)
+            ,SizedBox(width: 10.0,),
             Text('\$: ' + price.toString(), style: TextStyle(fontFamily: 'Oswald', color: Colors.grey)),            
           ],);
   }
@@ -77,7 +113,7 @@ class ProductPage extends StatelessWidget
           // child: Text(title, style: TextStyle(fontSize: 26.0, fontFamily: 'Oswald', fontWeight: FontWeight.bold),)
           child: TitleDefault(product.title)
           ,),
-          _buildAddressPriceRow(product.price),
+          _buildAddressPriceRow(product.location.address, product.price, context),
           Container(
             padding: EdgeInsets.all(10.0) ,
             //alignment: Alignment.center,

@@ -21,7 +21,7 @@ class _ProductListPageState extends State<ProductListPage>{
 
   @override
   initState(){ // questa classe è diventata stateful solo per poter utilizzare questa funzione
-    widget.model.fetchProducts();
+    widget.model.fetchProducts(onlyForUser: true);
     super.initState();
   }
 
@@ -37,7 +37,7 @@ class _ProductListPageState extends State<ProductListPage>{
                 Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                   return ProductEditPage();
                 })).then((_){
-                  productsModel.selectProduct(null);
+                   productsModel.selectProduct(null);
                 });
               },
             );    

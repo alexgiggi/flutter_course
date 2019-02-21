@@ -1,0 +1,29 @@
+instalazione: 
+
+1) Installare node js
+2) run -->  "npm install -g firebase-tools"
+3) run "firebase login"
+4) run "firebase init"
+
+installazione libreria cors
+cd .\functions\
+poi run "npm install --save cors"
+
+trattamento file:
+run "npm install --save busboy" --> package per estrazione dei file in arrivo
+run "npm install --save uuid" --> package per creazione di id univoci
+ 
+
+installazione google storage --> pacchetto per poter usufruire dello storage cloud da firebase cloud
+run "npm install --save @google-cloud/storage" 
+
+Attenzione: per poter usufruire dello storage fa firebase è necessario ottenere le credenziali dalla nostra app su firebase 
+(in firebase cliccare sulla rotellina vicino al nome del progetto in alto a sx e andare nel tab 'service accounts', 
+quindi in Firebase Admin SDK cliccare su 'generate new private key' da scaricare nella cartella 'functions', si può anche rinominare)
+
+amministrazione firebase:
+run "npm install --save firebase-admin"
+
+
+
+run "firebase deploy"  --> fa il deploy della funzione js su firebase

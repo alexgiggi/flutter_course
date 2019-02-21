@@ -8,6 +8,8 @@ import './pages/auth.dart';
 import 'package:flutter_course/scoped-models/main.dart';
 import 'package:scoped_model/scoped_model.dart';
 import './models/product.dart';
+//import 'package:map_view/map_view.dart';
+
 
 // import './pages/productsPage.dart';
 
@@ -31,7 +33,7 @@ void main() {
   // debugPaintPointersEnabled = true;
 
   // miaFunzione(1,3);
-
+  //MapView.setApiKey('AIzaSyB1Vp0HU8lmvESc5TtvXBBznW1m6zDBPuc');
   runApp(MyApp());
 }
 

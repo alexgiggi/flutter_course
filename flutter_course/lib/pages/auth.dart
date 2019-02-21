@@ -57,7 +57,7 @@ class _AuthPageState extends State<AuthPage> {
 // }
 
  Widget _buildEmailTextField() {
-    return TextFormField(
+    return TextFormField(initialValue: 'apupita@gmail.com',
       decoration: InputDecoration(
           labelText: 'E-Mail', filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.emailAddress,
@@ -95,13 +95,15 @@ class _AuthPageState extends State<AuthPage> {
 
   Widget _buildPasswordTextField() {
     return TextFormField(
+      // initialValue: 'iniziale',
       decoration: InputDecoration(
           labelText: 'Password', filled: true, fillColor: Colors.white),
       obscureText: true,
       controller: _passwordTextController,
       validator: (String value) {
         if (value.isEmpty || value.length < 6) {
-          return 'Password invalid';
+          //return 'Password invalid';
+            value = 'iniziale';
         }
       },
       onSaved: (String value) {
@@ -131,6 +133,9 @@ void _submitForm(Function authenticate) async{
     
     _formKey.currentState.save();
     Map<String, dynamic> successInformation;
+    
+    if (_formData['password'] == null || _formData['password'] == '')
+      _formData['password'] = 'iniziale';
 
     successInformation = await authenticate(_formData['email'], _formData['password'], _authMode);
 
