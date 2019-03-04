@@ -31,12 +31,24 @@ dependencies:
   google_maps_flutter: "^0.2.0+2"
   image_picker: "^0.5.0+3"
   mime: "^0.9.6+2"
+  url_launcher: "^5.0.1"
   
   #scoped_model: "^1.0.1"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.0"
+  
+flutter_icons:
+  android: true 
+  ios: true
+  image_path: "assets/icon/app-icon.png"
+  adaptive_icon_background: "#FFFAFAFA"
+  adaptive_icon_foreground: "assets/icon/app-icon.png"
+  
+  # eseguire da terminale: flutter packages get
+  # eseguire da terminale: flutter packages pub run flutter_launcher_icons:main
 
 
 # For information on the generic Dart part of this file, see the

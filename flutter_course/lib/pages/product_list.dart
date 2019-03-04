@@ -21,7 +21,7 @@ class _ProductListPageState extends State<ProductListPage>{
 
   @override
   initState(){ // questa classe è diventata stateful solo per poter utilizzare questa funzione
-    widget.model.fetchProducts(onlyForUser: true);
+    widget.model.fetchProducts(onlyForUser: true, clearExisting: true);
     super.initState();
   }
 
@@ -68,7 +68,7 @@ class _ProductListPageState extends State<ProductListPage>{
               }
             },
             child: Column(children: <Widget>[
-            ListTile(contentPadding: EdgeInsets.symmetric(horizontal: 120.0),
+            ListTile(contentPadding: EdgeInsets.symmetric(horizontal: 2.5),
             leading: CircleAvatar(
               //backgroundImage: AssetImage(model.allProducts[index].image
               backgroundImage: NetworkImage(model.allProducts[index].image
@@ -80,7 +80,7 @@ class _ProductListPageState extends State<ProductListPage>{
             trailing: _buildEditButton(context, index, model),
           ),
           Divider(
-            height: 40.0,
+            height: 10.0,
             color: Colors.orange,
 
           )

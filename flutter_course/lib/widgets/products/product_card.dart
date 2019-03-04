@@ -10,22 +10,22 @@ import 'package:scoped_model/scoped_model.dart';
 
 class ProductCard extends StatelessWidget{
   final Product product;
-  final int productIndex;
-  ProductCard(this.product, this.productIndex);
+  //final int productIndex;
+  ProductCard(this.product);//, this.productIndex);
 
   Widget _buildTitlePriceRow(){
     return Container(color: Colors.blue,
-      height: 40.0, 
+      //height: 60.0, 
       // margin: EdgeInsets.all(10.0),
-      margin: EdgeInsets.only(top: 10.0, left: 00.0, bottom: 1.0), // il margin è lo spazio allesterno del contenitore
+      margin: EdgeInsets.only(top: 10.0, left: 00.0,), // il margin è lo spazio allesterno del contenitore
       padding: EdgeInsets.only(top: 0.0), // il padding è lo spazio all'interno del contenitore
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
         // Text(product['title'], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),
-        TitleDefault(product.title),
+        Flexible(child: TitleDefault(product.title),),
         SizedBox(width: 8.0,),
-        Text(' (' + (product.price.toString()) + ' €.)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),
+        Flexible(child: Text(' (' + (product.price.toString()) + ' €.)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, fontFamily: 'Oswald'),),),
         SizedBox(width: 8.0,),
         PriceTag(product.price.toString())
         // Container(padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
@@ -41,40 +41,49 @@ class ProductCard extends StatelessWidget{
                               children: <Widget>[
                                 FlatButton(
                                   child: Text('Details'),
-                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + model.allProducts[productIndex].id).then((MiaClasse value) 
-                                              { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
-                                                print('funzione che cattura il back (Navigator.pop)');
-                                                /*
-                                                if (value!=null && value.cancellabile){
-                                                  print('Ritorno: ' + value.nome);
-                                                  deleteProduct(index);
-                                                }
-                                                else{
-                                                  if (value==null)
-                                                    print('*** value==null');
-                                                  else
-                                                    print('*** value!=null ma value.cancellabile=false');
-                                                }
-                                                */
-                                              }),
-                                ),
+                                  //onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + model.allProducts[productIndex].id).then((MiaClasse value) 
+                                  onPressed: () {
+                                      //model.selectProduct(model.allProducts[productIndex].id);
+                                      model.selectProduct(product.id);
+                                      Navigator.pushNamed<MiaClasse>(context,'/product/' + product.id).then((MiaClasse value){
+                                        model.selectProduct(null);
+                                      });
+                                      }
+                                              // { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
+                                              //   print('funzione che cattura il back (Navigator.pop)');
+                                              //   /*
+                                              //   if (value!=null && value.cancellabile){
+                                              //     print('Ritorno: ' + value.nome);
+                                              //     deleteProduct(index);
+                                              //   }
+                                              //   else{
+                                              //     if (value==null)
+                                              //       print('*** value==null');
+                                              //     else
+                                              //       print('*** value!=null ma value.cancellabile=false');
+                                              //   }
+                                              //   */
+                                              // }
+                                              ),                                
                                 IconButton(
                                   icon: Icon(Icons.info),
                                   iconSize: 40.0,
                                   color: Theme.of(context).accentColor,
-                                  onPressed: () => Navigator.pushNamed<MiaClasse>(context,'/product/' + model.allProducts[productIndex].id).then((MiaClasse value) 
-                                              { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart
-                                                print('funzione che cattura il back (Navigator.pop)');                                                
-                                              }),
+                                  onPressed: () {
+                                      model.selectProduct(product.id);
+                                      Navigator.pushNamed<MiaClasse>(context,'/product/' + product.id).then((MiaClasse value){
+                                        model.selectProduct(null);
+                                      });
+                                      }
                                   
                                 ),
                                 IconButton(
-                                  icon: Icon(model.allProducts[productIndex].isFavorite ? Icons.favorite : Icons.favorite_border),
+                                  icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
                                   color: Colors.redAccent,
                                   iconSize: 40.0,
                                   
                                   onPressed: (){
-                                    model.selectProduct(model.allProducts[productIndex].id);
+                                    model.selectProduct(product.id);
                                     model.toggleProductFavoriteStatus();
                                   }
                                               /*
@@ -96,24 +105,25 @@ class ProductCard extends StatelessWidget{
       child: Column(
         children: <Widget>[
                             //Image.asset(product.image), // commentare questa riga per vedere le print inserite senza eccezioni di mezzo..
-                            FadeInImage(image: NetworkImage(product.image), 
+                            Hero(
+                              tag: product.id,
+                              child: FadeInImage(image: NetworkImage(product.image), 
                             height: 300.0, 
                             fit: BoxFit.cover,
-                            placeholder: AssetImage('assets/food.jpg'),) , 
+                            placeholder: AssetImage('assets/food.jpg'),) , ),
                             // SizedBox(height: 5.0,),
                             _buildTitlePriceRow(),
+                            SizedBox(height: 20.0,),
                             DecoratedBox(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
                                 border: Border.all(color: Colors.grey, width: 2.0, )
                               ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
-                                child: AddressTag(product.location.address)
-                                ),
+                              child: AddressTag(product.location.address)
+                                
                               ),
                             // sText(product['title']),
-                            Text(product.userEmail),
+                            // Text(product.userEmail),
                             _buildActionButton(context)
         ],
       ),

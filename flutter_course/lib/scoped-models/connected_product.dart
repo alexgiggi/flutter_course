@@ -216,7 +216,8 @@ mixin ProductsModel on ConnectedProductsModel {
 
     try{
 
-        final http.Response response = await http.put('https://flutter-products-ap.firebaseio.com/products/${selectedProduct.id}.json?auth=${_authenticatedUser.token}', body: json.encode(updateData));
+        //final http.Response response = 
+        await http.put('https://flutter-products-ap.firebaseio.com/products/${selectedProduct.id}.json?auth=${_authenticatedUser.token}', body: json.encode(updateData));
         _isLoading = false;   
 
         final Product updatedProduct = Product(
@@ -255,7 +256,7 @@ mixin ProductsModel on ConnectedProductsModel {
     _selProductId = null;
     notifyListeners();
 
-    return http.delete('https://flutter-products-ap.firebaseio.com/products/${deletedProductId}.json?auth=${_authenticatedUser.token}').then((http.Response response){
+    return http.delete('https://flutter-products-ap.firebaseio.com/products/$deletedProductId.json?auth=${_authenticatedUser.token}').then((http.Response response){
 
         
       _isLoading = false;
@@ -270,11 +271,15 @@ mixin ProductsModel on ConnectedProductsModel {
         return false;
       });
     
-  }
+  } 
 
-  Future<Null> fetchProducts({bool onlyForUser = false}){
+  Future<Null> fetchProducts({bool onlyForUser = false, clearExisting = false}){
 
     _isLoading =true;
+    if (clearExisting){
+      _products = [];
+    }
+
     notifyListeners();
 
     return http.get('https://flutter-products-ap.firebaseio.com/products.json?auth=${_authenticatedUser.token}').then<Null>((http.Response response){
@@ -348,7 +353,7 @@ mixin ProductsModel on ConnectedProductsModel {
 
     _products[selectedProductIndex] = updatedProduct;
     notifyListeners();
-
+    
     http.Response response;
     final String urlBase = 'https://flutter-products-ap.firebaseio.com/products/';
     if (newFavoriteStatus){
@@ -380,6 +385,8 @@ mixin ProductsModel on ConnectedProductsModel {
       else{
         print('ok aggiornamento favoriti');
       }
+      _selProductId = null;
+
 }
   void toggleDisplayMode() {
     _showFavorites = !_showFavorites;
@@ -563,6 +570,7 @@ mixin UserModel on ConnectedProductsModel{
       _authenticatedUser = null;
       _authTimer.cancel(); //reset timer
       _userSubject.add(false);
+      _selProductId =null;
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       print('logout!');

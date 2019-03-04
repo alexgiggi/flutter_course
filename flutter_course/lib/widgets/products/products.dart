@@ -21,7 +21,7 @@ class Products extends StatelessWidget { // questa classe contiene la lista dei 
     if (products.length > 0) {
       productCard = ListView.builder( // il metodo statico builder viene utilizzato se si vuole creare una lista che si carica dinamicamente
         itemBuilder: (BuildContext context, int index){
-          return ProductCard(products[index], index);
+          return ProductCard(products[index]);//, index);
         }, 
         // itemBuilder: (BuildContext context, int index) => ProductCard(products[index], index),
         itemCount: products.length,

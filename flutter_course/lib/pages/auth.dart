@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped-models/main.dart';
 import '../models/auth.dart';
+import '../ui_elements/adaptive_progress_indicator.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -10,7 +11,7 @@ class AuthPage extends StatefulWidget {
   }
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin{
   // String _emailValue;
   // String _passwordValue;
   // bool _acceptTerms = false;
@@ -24,6 +25,15 @@ class _AuthPageState extends State<AuthPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   AuthMode _authMode = AuthMode.Login;
+
+  AnimationController _controller;
+  Animation<Offset> _slideAnimation;
+
+  void initState(){
+    _controller =AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _slideAnimation =Tween<Offset>(begin: Offset(0.0, -2.0), end: Offset.zero).animate(CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn));
+    super.initState();
+  }
 
   DecorationImage _buildBackgroungImage(){
     return DecorationImage(
@@ -78,19 +88,24 @@ class _AuthPageState extends State<AuthPage> {
 
 
   Widget _buildPasswordConfirmTextField() {
-    return TextFormField(
+    return 
+      FadeTransition(
+      opacity: CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+      child: SlideTransition( 
+      position: _slideAnimation,
+      child: TextFormField(
       decoration: InputDecoration(
           labelText: 'Confirm password', filled: true, fillColor: Colors.white),
       obscureText: true,
       validator: (String value) {
-        if (_passwordTextController.text != value) {
+        if (_passwordTextController.text != value && _authMode ==AuthMode.Signup) {
           return 'Password do not match';
         }
       },
       // onSaved: (String value) {
       //   _formData['password'] = value;
       // },
-    );
+    )),);
   }
 
   Widget _buildPasswordTextField() {
@@ -183,22 +198,35 @@ void _submitForm(Function authenticate) async{
             _buildEmailTextField(),
             SizedBox(height: 10.9,),
             _buildPasswordTextField(),
-            _authMode == AuthMode.Signup ? _buildPasswordConfirmTextField() : Container(),
+            //_authMode == AuthMode.Signup ? _buildPasswordConfirmTextField() : Container(),
+             SizedBox(height: 10.0,),
+            _buildPasswordConfirmTextField(),
             _buildAcceptSwitch(),
-            SizedBox(
-              height: 10.0,
-            ),
+            
+            // SizedBox(height: 10.0,),
+
             FlatButton(child: Text('Switch to ${_authMode == AuthMode.Login ? 'Signup' : 'Login'}'), onPressed: (){
-              setState(() {
-                _authMode = _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login; // switch auth mode                
-              });
               
+                if(_authMode == AuthMode.Login){
+                  setState(() {    
+                    _authMode = AuthMode.Signup;
+                  });
+                  _controller.forward();
+                } else{
+                  setState(() {    
+                    _authMode = AuthMode.Login;
+                  });
+                  _controller.reverse();
+                }
+
+                //_authMode = _authMode == AuthMode.Login ? AuthMode.Signup : AuthMode.Login; // switch auth mode                
+
             },),
             SizedBox(
               height: 10.0,
             ),
             ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
-              return model.isLoading ? CircularProgressIndicator() : RaisedButton(
+              return model.isLoading ? AdaptiveProgressIndicator() : RaisedButton(
               color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               child: Text(_authMode==AuthMode.Login ? 'LOGIN':'SIGN UP'),

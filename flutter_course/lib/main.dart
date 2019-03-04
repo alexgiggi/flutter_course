@@ -8,6 +8,12 @@ import './pages/auth.dart';
 import 'package:flutter_course/scoped-models/main.dart';
 import 'package:scoped_model/scoped_model.dart';
 import './models/product.dart';
+
+import './widgets/helpers/custom_route.dart';
+import './ui_elements/adaptive_theme.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+
 //import 'package:map_view/map_view.dart';
 
 
@@ -50,7 +56,22 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   final MainModel _model = MainModel();
+  final _platformChannel = MethodChannel('flutter_course.com/battery');
   bool _isAuthenticated = false;
+
+  Future<Null> _getBatteryLevel() async{
+    String batteryLevel;
+    try{
+      final int result =await _platformChannel.invokeMethod('getBatteryLevel');
+      batteryLevel = 'Battery level is $result %.';
+    }
+    catch (error){
+      batteryLevel = 'Failed to get battery level';
+    }
+    
+    print(batteryLevel);
+
+  }
 
   @override
     void initState() {
@@ -69,6 +90,9 @@ class _MyAppState extends State<MyApp> {
             });
 
       });
+
+      _getBatteryLevel();
+
       super.initState();
     }
 
@@ -113,13 +137,9 @@ class _MyAppState extends State<MyApp> {
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
+        title: 'EasyList',
         // debugShowMaterialGrid: true,
-        theme: ThemeData(
-            brightness: Brightness.light,
-            primarySwatch: Colors.deepOrange,
-            accentColor: Colors.deepPurple,
-            buttonColor: Colors.yellow
-            ),
+        theme: getAdaptiveThemeData(context),
         // home: AuthPage(), // vedi commento sotto relativo alla route '/'
         routes: {
           '/': (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductsPage(_model),
@@ -153,7 +173,9 @@ class _MyAppState extends State<MyApp> {
               return product.id == productId; 
             } );
 
-            return MaterialPageRoute<MiaClasse>(builder: (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductPage(product));
+            //return MaterialPageRoute<MiaClasse>(builder: (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductPage(product));
+            return CustomRoute<MiaClasse>(builder: (BuildContext context) => !_isAuthenticated ? AuthPage() : ProductPage(product));
+
           }
 
           return null;

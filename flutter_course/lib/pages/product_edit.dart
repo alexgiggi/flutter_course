@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import '../widgets/helpers/ensure-visible.dart';
 import '../models/product.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:scoped_model/scoped\_model.dart';
 import '../scoped-models/main.dart';
 import '../widgets/form_inputs/location.dart';
 import '../models/location_data.dart';
 import '../widgets/form_inputs/image.dart';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import '../ui_elements/adaptive_progress_indicator.dart'; 
 
 class ProductEditPage extends StatefulWidget{
   
@@ -49,6 +51,7 @@ final Map<String, dynamic> _formData = {
   final _priceFocusNode = FocusNode();
   final _titleTextController = TextEditingController();
   final _descriptionTextController = TextEditingController();
+  final _priceTextController =TextEditingController();
 
   Widget _buildTitleTextField(Product product) {
         if(product==null && _titleTextController.text.trim()==''){
@@ -139,14 +142,22 @@ final Map<String, dynamic> _formData = {
   }
 
   Widget _buildPriceTextField(Product product){
+
+    if(product==null && _priceTextController.text.trim()==''){
+          _priceTextController.text = '';
+        } else if(product!=null && _priceTextController.text.trim()==''){
+          _priceTextController.text = product.price.toString();
+        }
+
     return EnsureVisibleWhenFocused(
       focusNode: _priceFocusNode,
       child: TextFormField(
               focusNode: _priceFocusNode,
-              initialValue: product==null ? '' : product.price.toString(),
+              // initialValue: product==null ? '' : product.price.toString(),
               decoration: InputDecoration(labelText: 'Product price'),
+              controller: _priceTextController,
               validator: (String value){
-                if (value.isEmpty || !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)){
+                if (value.isEmpty || !RegExp(r'^(?:[1-9]\d*|0)?(?:[.,]\d+)?$').hasMatch(value)){
                   return 'Prezzo non corretto, verificare';
                 }
                   
@@ -159,12 +170,12 @@ final Map<String, dynamic> _formData = {
               //             });
               // }
 
-              onSaved: (String value){
-                // setState(() {
-                  _formData['price'] = value;
+              // onSaved: (String value){
+              //   // setState(() {
+              //     _formData['price'] = value;
                   
-                  // });
-              }
+              //     // });
+              // }
 
             )
             );
@@ -183,6 +194,9 @@ final Map<String, dynamic> _formData = {
     if (!_formKey.currentState.validate() || (_formData['image'] == null && selectedProductIndex==-1)) //selectedProductIndex==-1 sono in edit-new mode
     {  
       print('Errore validazione?');
+      if (_formData['image'] == null) print('_formData[\'image\'] == null?');
+      if (selectedProductIndex==-1)  print('selectedProductIndex==-1');
+      if (!_formKey.currentState.validate()) print('!_formKey.currentState.validate()');
       return;
     }
     
@@ -194,7 +208,8 @@ final Map<String, dynamic> _formData = {
             _titleTextController.text,
             _descriptionTextController.text,
             _formData['image'],
-            double.parse(_formData['price']),
+            double.parse(_priceTextController.text.replaceFirst(RegExp(r','), '.')),
+            //double.parse(_formData['price']),
             _formData['location'])
             .then((bool success){
               if (success){
@@ -214,7 +229,8 @@ final Map<String, dynamic> _formData = {
             _titleTextController.text,
             _descriptionTextController.text,
             _formData['image'],
-            double.parse(_formData['price']),
+            // double.parse(_formData['price']),
+            double.parse(_priceTextController.text.replaceFirst(RegExp(r','), '.')),
             _formData['location']).then((_){
               Navigator.pushReplacementNamed(context, '/products').then((_)=>setSelectedProduct(null));
             });;
@@ -228,7 +244,7 @@ final Map<String, dynamic> _formData = {
 
   Widget _buildSubmitButton(){
     return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
-      return model.isLoading? Center(child: CircularProgressIndicator(),) : RaisedButton(
+      return model.isLoading? Center(child: AdaptiveProgressIndicator(),) : RaisedButton(
         child: Text('Save'), 
         color: Theme.of(context).accentColor,
         textColor: Colors.white,
@@ -290,7 +306,7 @@ final Map<String, dynamic> _formData = {
     
   }
       
-  @override
+  //@override
   State<StatefulWidget> createState() {
     return null;
   }
