@@ -68,23 +68,21 @@ class _ProductListPageState extends State<ProductListPage>{
               }
             },
             child: Column(children: <Widget>[
-            ListTile(contentPadding: EdgeInsets.symmetric(horizontal: 2.5),
-            leading: CircleAvatar(
-              //backgroundImage: AssetImage(model.allProducts[index].image
-              backgroundImage: NetworkImage(model.allProducts[index].image
-            ),),
-            title: Text(
-              model.allProducts[index].title,
-            ),
-            subtitle: Text('\$ ${model.allProducts[index].price.toString()}'),
-            trailing: _buildEditButton(context, index, model),
-          ),
-          Divider(
-            height: 10.0,
-            color: Colors.orange,
-
-          )
-          ],),);
+                                              ListTile(contentPadding: EdgeInsets.symmetric(horizontal: 2.5),
+                                                        leading: CircleAvatar(//backgroundImage: AssetImage(model.allProducts[index].image
+                                                                                backgroundImage: NetworkImage(model.allProducts[index].image),
+                                                                            ),
+                                                        title: Text(model.allProducts[index].title),
+                                                        subtitle: Text('\$ ${model.allProducts[index].price.toString()}'),
+                                                        trailing: _buildEditButton(context, index, model),
+                                                      ),
+                                            Divider(
+                                              height: 10.0,
+                                              color: Colors.orange,            
+                                            )
+                                          ]
+          ,           ),
+          );
         });
       });
   }

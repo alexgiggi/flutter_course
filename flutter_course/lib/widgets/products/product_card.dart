@@ -47,6 +47,7 @@ class ProductCard extends StatelessWidget{
                                       model.selectProduct(product.id);
                                       Navigator.pushNamed<MiaClasse>(context,'/product/' + product.id).then((MiaClasse value){
                                         model.selectProduct(null);
+                                        
                                       });
                                       }
                                               // { // questo verrà poi utilizzato dalla funzione 'onGenerateRoute' di main.dart

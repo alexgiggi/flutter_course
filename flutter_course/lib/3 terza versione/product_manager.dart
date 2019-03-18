@@ -19,8 +19,10 @@ class ProductManager extends StatefulWidget {
 
 class _ProductManagerState extends State<ProductManager> {
   List<String> _products = [];
+  
   _ProductManagerState(){
-    print('[ProductManagerState] constructor');
+    print('[ProductManagerState] constructor');    
+    
   }
 
   @override

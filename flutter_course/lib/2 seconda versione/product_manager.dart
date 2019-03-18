@@ -9,7 +9,7 @@ class ProductManager extends StatefulWidget {
 }
 
 class _ProductManagerState extends State<ProductManager> {
-  List<String> _products = ['Food terster'];
+  List<String> _products = ['Food tester'];
 
   @override
   Widget build(BuildContext context) 
